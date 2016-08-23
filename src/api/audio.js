@@ -14,7 +14,7 @@ let speaker = new Speaker();
 export function startRain() { 
 
   decoder.on('format', () => {
-    volume.setVolume(decoder.mh,.3);
+    volume.setVolume(decoder.mh,.2);
   });
 
   rain = request.get('http://meditationroom.org/free-nature-sounds/summer-rain-audio/summer-rain.mp3');
