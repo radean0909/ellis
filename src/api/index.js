@@ -37,5 +37,12 @@ export default ({ config, db }) => {
 		});
 	})
 
+	api.get('/news/stop', (req, res) => {
+		stopNews();
+		res.json({
+			status: 'stopped'
+		});
+	});
+
 	return api;
 }

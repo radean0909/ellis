@@ -28,6 +28,7 @@ export function startRain() {
 export function stopRain() {
   if (rain) {
     rain.unpipe(decoder);
+    rain = null;
   }
 }
 
@@ -48,4 +49,11 @@ export function startNews() {
       news.pipe(decoder).pipe(new Speaker());
     })
   }) 
+}
+
+export function stopNews() {
+  if (news) {
+    news.unpipe(decoder);
+    news = null;
+  }
 }
