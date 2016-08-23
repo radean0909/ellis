@@ -8,10 +8,10 @@ import _ from 'underscore';
 
 let rain = null;
 let news = null;
+let decoder = new lame.Decoder();
+let speaker = new Speaker();
 
 export function startRain() { 
-
-  const decoder = new lame.Decoder();
 
   decoder.on('format', () => {
     volume.setVolume(decoder.mh,.3);
@@ -19,7 +19,7 @@ export function startRain() {
 
   rain = request.get('http://meditationroom.org/free-nature-sounds/summer-rain-audio/summer-rain.mp3');
   rain.pipe(decoder)
-    .pipe(new Speaker())
+    .pipe(speaker)
     .on('finish', function () {
       console.log('done');
     });
@@ -27,8 +27,11 @@ export function startRain() {
 
 export function stopRain() {
   if (rain) {
-    rain.unpipe(decoder);
+    rain.end();
+    decoder.end();
+    decoder = new lame.Decoder();
     rain = null;
+    speaker = new Speaker();
   }
 }
 
@@ -39,33 +42,34 @@ export function startNews() {
     parseString(out.body, (err, res) => {
       let url = res.rss.channel[0].item[0].enclosure[0]['$'].url;
 
-      const decoder = new lame.Decoder();
-
       decoder.on('format', () => {
         volume.setVolume(decoder.mh,.7);
       });
 
       news = request.get(url);
-      news.pipe(decoder).pipe(new Speaker());
+      news.pipe(decoder).pipe(speaker);
     })
   }) 
 }
 
 export function stopNews() {
   if (news) {
-    news.unpipe(decoder);
+    news.end();
+    decoder.end();
+    decoder = new lame.Decoder();
     news = null;
+    speaker = new Speaker();
   }
 }
 
 export function pauseNews() {
-  if (news) {
-    news.pause();
+  if (news && decoder && speaker) {
+    speaker.cork();
   }
 }
 
 export function resumeNews() {
-  if (news) {
-    news.resume();
+  if (news && decoder && speaker) {
+    speaker.uncork();
   }
 }

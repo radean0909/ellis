@@ -6,7 +6,8 @@ import {
 	stopRain, 
 	startNews, 
 	stopNews, 
-	pauseNews } from './audio';
+	pauseNews,
+	resumeNews } from './audio';
 
 export default ({ config, db }) => {
 	let api = Router();
