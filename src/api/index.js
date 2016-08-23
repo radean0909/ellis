@@ -1,7 +1,12 @@
 import { version } from '../../package.json';
 import { Router } from 'express';
 import facets from './facets';
-import {startRain, stopRain, startNews} from './audio'
+import {
+	startRain, 
+	stopRain, 
+	startNews, 
+	stopNews, 
+	pauseNews } from './audio';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -43,6 +48,22 @@ export default ({ config, db }) => {
 			status: 'stopped'
 		});
 	});
+
+	api.get('/news/pause', (req, res) => {
+		pauseNews();
+		res.json({ 
+			status: 'paused',
+			media: 'news'  
+		});
+	})
+
+	api.get('/news/resume', (req, res) => {
+		resumeNews();
+		res.json({ 
+			status: 'playing',
+			media: 'news'  
+		});
+	})
 
 	return api;
 }

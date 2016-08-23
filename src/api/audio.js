@@ -57,3 +57,15 @@ export function stopNews() {
     news = null;
   }
 }
+
+export function pauseNews() {
+  if (news) {
+    news.pause();
+  }
+}
+
+export function resumeNews() {
+  if (news) {
+    news.resume();
+  }
+}
